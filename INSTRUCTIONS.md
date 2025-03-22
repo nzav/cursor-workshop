@@ -1,4 +1,4 @@
-# Mastering Cursor with a Next.js 15 Starter (Shadcn UI)
+# Mastering Cursor
 
 This workshop will guide you through using Cursor, an AI-powered code editor, to enhance your Next.js development workflow using the [Cursor Workshop](https://github.com/nzav/cursor-workshop) as our foundation.
 
@@ -93,8 +93,6 @@ This workshop will guide you through using Cursor, an AI-powered code editor, to
    - Open it and add the following content:
 
    ```markdown
-   ## Pre-Commit Verification
-
    **CRITICAL: Always verify changes before committing**
 
    Before committing any changes, always verify what you're about to commit:
