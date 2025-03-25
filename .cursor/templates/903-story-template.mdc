@@ -1,0 +1,466 @@
+---
+description: ALWAYS use when creating or updating story files to ensure proper tracking and implementation
+globs: feature_documentation/**/stories/*.md
+---
+
+<rule>
+version: 2.0.0
+priority: high
+
+context:
+  - When creating implementation stories for features
+  - When updating existing stories
+  - When tracking implementation progress
+  - When documenting implementation tasks
+
+filters:
+  - type: path
+    pattern: "feature_documentation/.*/stories/.*\\.md$"
+  - type: content
+    pattern: "Story|Task|Implementation"
+  - type: event
+    pattern: "story_creation_requested"
+
+actions:
+  - type: analyze
+    message: |
+      This rule enforces a standardized story structure that ensures proper tracking and implementation:
+      
+      1. Clear story identification and description
+      2. User story format for context
+      3. Status tracking throughout implementation
+      4. Hierarchical task breakdown with detailed implementation steps
+      5. Implementation approach documentation for each task
+      6. Testing requirements per TDD principles
+      7. Granular progress tracking at the task level
+      
+      Stories must be organized in the feature's stories directory with consistent structure.
+      
+      ## Progress Tracking Reference
+      
+      These guidelines define how to track task progress and status throughout implementation:
+      
+      ### Status Definitions and Progress Ranges
+      - **Not Started**: Task hasn't been started yet (0%)
+      - **In Progress**: Development is underway, from branch creation through implementation steps 1-5 (10-90%)
+      - **Awaiting Review**: All implementation steps 1-5 are complete, tests pass, and changes are ready for user review BEFORE committing (90-95%)
+      - **Approved**: User has approved changes, code has been committed but not yet merged to main (95-99%)
+      - **Merged**: Changes have been merged to main and branch deleted (100%)
+      
+      ### Status Transition Workflow
+      - Start → Not Started: Task is defined in the story
+      - Not Started → In Progress: Branch is created and work begins
+      - In Progress → Awaiting Review: Implementation steps 1-5 are complete, tests pass, ready for user review
+      - Awaiting Review → Approved: User has reviewed and approved changes (step 6), code is committed (step 7)
+      - Approved → Merged: Changes are merged to main and branch deleted (step 8)
+      
+      ### Implementation Steps to Status Mapping
+      - Steps 1-5 (Test Planning through Review Preparation): In Progress
+      - Step 6 (User Review): Awaiting Review → Approved (once approved)
+      - Step 7 (Code Commitment): Approved
+      - Step 8 (Integration): Merged
+      
+      ### Critical Rules
+      - Tasks should NEVER be marked as 100% complete until after user review and approval
+      - Maximum progress before user review should be 90-95%
+      - The final 5-10% of progress is reserved for incorporating review feedback
+  
+  - type: generate
+    message: |
+      # Story: S{m}-[Story Name]
+      
+      ## Epic Reference
+      Epic-{n}: [Epic Title]
+      
+      ## Story Description
+      
+      **As a** [role]
+      **I want** [action]
+      **so that** [benefit]
+      
+      ## Status
+      
+      [Draft|In Progress|Complete|Cancelled]
+      
+      ## Context
+      
+      [Background information]
+      [Current state]
+      [Story justification]
+      [Technical context]
+      [Business drivers]
+      [Relevant history from previous stories]
+      
+      ## Estimation
+      
+      Story Points: [Story Points]
+      
+      ## Tasks
+      
+      ### Task 1: [Task Name]
+      **Status:** [Not Started|In Progress|Awaiting Review|Approved|Merged]
+      **Branch:** feature/F{n}-S{m}-T1-task-name
+      **Progress:** [0-100]%
+      **Last Updated:** {{date}}
+      
+      #### Implementation Approach
+      [Detailed description of how this task will be implemented]
+      [Technical approach]
+      [Design patterns to use]
+      [Components/modules to modify]
+      [Libraries/frameworks to use]
+      [Key algorithms or data structures]
+      
+      #### Implementation Steps
+      - [ ] **1. Test Planning**
+        - [ ] Define test scenarios
+        - [ ] Create test fixtures
+        - [ ] Set up test environment
+      - [ ] **2. Test Implementation**
+        - [ ] Write unit tests
+        - [ ] Write integration tests (if applicable)
+        - [ ] Ensure test coverage ≥ 80%
+      - [ ] **3. Code Implementation**
+        - [ ] Implement functionality to pass tests
+        - [ ] Refactor for optimization/readability
+        - [ ] Document code
+      - [ ] **4. Verification**
+        - [ ] Run all tests (current coverage: X%)
+        - [ ] Perform manual testing
+        - [ ] Document test results
+      - [ ] **5. Review Preparation**
+        - [ ] Update documentation
+        - [ ] Prepare demo for user review
+        - [ ] Document implementation decisions
+      - [ ] **6. User Review**
+        - [ ] Present changes to user BEFORE committing
+        - [ ] Demonstrate functionality and test coverage
+        - [ ] Address any immediate feedback
+        - [ ] Obtain user approval
+      - [ ] **7. Code Commitment**
+        - [ ] Commit approved changes with conventional commit messages
+        - [ ] Push branch to remote repository
+        - [ ] Request formal review if needed
+      - [ ] **8. Integration**
+        - [ ] Merge branch to main
+        - [ ] Delete feature branch
+        - [ ] Verify successful deployment/integration
+      
+      #### Technical Notes
+      [Add any technical notes, decisions, or challenges here]
+      
+      #### Review History
+      - {{date}}: [Not Reviewed|Changes Requested|Approved] - [Reviewer Name]
+        - [Review comments]
+      
+      ### Task 2: [Task Name]
+      **Status:** Not Started
+      **Branch:** Not Created
+      **Progress:** 0%
+      **Last Updated:** N/A
+      
+      [Similar structure as Task 1]
+      
+      ## Constraints
+      
+      [Technical or business constraints]
+      
+      ## Data Models / Schema
+      
+      [Database schemas]
+      [API request/response models]
+      [Interfaces/types]
+      
+      ## Implementation Notes
+      
+      [Implementation commentary]
+      [Important considerations]
+      [Technical decisions]
+      
+      ## Testing Approach
+      
+      [Description of testing approach]
+      [Test cases]
+      [Coverage goals]
+      
+      *Note: Progress tracking guidelines have been moved to the requirements section*
+
+requirements:
+  ## Documentation Requirements
+  - Story files must be placed in the feature's stories directory
+  - Story file names must follow the S{m}-story-name.story.md format
+  - Each story must have a clear reference to its parent Epic
+  - Stories must follow the "As a, I want, so that" user story format
+  - Status must be clearly marked (Draft, In Progress, Complete, Cancelled)
+  - Context section must provide sufficient background information
+  - Story points estimation must be included
+  
+  ## Task Structure Requirements
+  - Tasks must include detailed implementation approach
+  - Tasks must include implementation steps with checkboxes
+  - Each task must have a status, branch info, and progress percentage
+  - Tasks must follow TDD principles with test tasks preceding implementation
+  - Technical decisions must be documented in Technical Notes
+  - Use - [x] for completed items and - [ ] for incomplete items
+  - Use ~~text~~ for skipped/cancelled items
+  
+  ## Progress Tracking Requirements
+  - Task progress must be calculated based on completed implementation steps
+  - Review history must be maintained for each task
+  - Tasks must NEVER be marked as 100% complete until user review and approval
+  - Maximum progress for tasks awaiting review should be 90-95%
+  - Task status must follow the defined workflow: Not Started → In Progress → Awaiting Review → Approved → Merged
+  - Progress percentages must align with status:
+    - Not Started: 0%
+    - In Progress: 10-90%
+    - Awaiting Review: 90-95%
+    - Approved: 95-99%
+    - Merged: 100%
+  - The final 5-10% of progress is reserved for incorporating review feedback
+
+examples:
+  - type: valid
+    input: |
+      # Story: S1-Implement-Chessboard-UI
+      
+      ## Epic Reference
+      Epic-1: Basic Chess Game
+      
+      ## Story Description
+      
+      **As a** chess player
+      **I want** to see a clear and interactive chessboard
+      **so that** I can play chess in the web browser
+      
+      ## Status
+      
+      In Progress
+      
+      ## Context
+      
+      Part of Epic-1 which implements the core 2-player chess game. This story focuses on the visual and interactive aspects of the chessboard. The project setup (Story-1) is complete, providing the foundation for UI implementation.
+      
+      ## Estimation
+      
+      Story Points: 2
+      
+      ## Tasks
+      
+      ### Task 1: Create Chessboard Grid
+      **Status:** Merged
+      **Branch:** feature/F1-S1-T1-chessboard-grid
+      **Progress:** 100%
+      **Last Updated:** 2023-10-01
+      
+      #### Implementation Approach
+      Create a React component for the chessboard grid using CSS Grid for layout.
+      The grid will be 8x8 with alternating colors for squares.
+      We'll use styled-components for styling and implement responsive design principles.
+      
+      #### Implementation Steps
+      - [x] **1. Test Planning**
+        - [x] Define test scenarios for grid rendering
+        - [x] Create test fixtures for board state
+        - [x] Set up React Testing Library environment
+      - [x] **2. Test Implementation**
+        - [x] Write tests for grid dimensions
+        - [x] Write tests for square coloring
+        - [x] Ensure test coverage ≥ 80%
+      - [x] **3. Code Implementation**
+        - [x] Implement 8x8 board layout component
+        - [x] Add square coloring
+        - [x] Make grid responsive
+      - [x] **4. Verification**
+        - [x] Run all tests (current coverage: 95%)
+        - [x] Perform manual testing in different browsers
+        - [x] Verify responsive behavior
+      - [x] **5. Review Preparation**
+        - [x] Update component documentation
+        - [x] Create demo page
+        - [x] Document design decisions
+      - [x] **6. User Review**
+        - [x] Present changes to user BEFORE committing
+        - [x] Demonstrate functionality and test coverage
+        - [x] Address any immediate feedback
+        - [x] Obtain user approval
+      - [x] **7. Code Commitment**
+        - [x] Commit approved changes with conventional commit messages
+        - [x] Push branch to remote repository
+        - [x] Request formal review if needed
+      - [x] **8. Integration**
+        - [x] Merge branch to main
+        - [x] Delete feature branch
+        - [x] Verify successful deployment/integration
+      
+      #### Technical Notes
+      Used CSS Grid instead of Flexbox for more precise control over the grid layout.
+      Implemented a color scheme that can be easily customized through theme variables.
+      Added mobile-specific styles for better touch interactions.
+      
+      #### Review History
+      - 2023-09-28: Changes Requested - John Smith
+        - Needs better contrast for accessibility
+      - 2023-09-30: Approved - John Smith
+        - Contrast issues fixed, good to merge
+      
+      ### Task 2: Add Chess Pieces
+      **Status:** In Progress
+      **Branch:** feature/F1-S1-T2-chess-pieces
+      **Progress:** 60%
+      **Last Updated:** 2023-10-05
+      
+      #### Implementation Approach
+      Create React components for each chess piece using SVG graphics.
+      Implement a PieceComponent that renders the appropriate SVG based on piece type and color.
+      Use the React Context API to manage the board state and piece positions.
+      
+      #### Implementation Steps
+      - [x] **1. Test Planning**
+        - [x] Define test scenarios for piece rendering
+        - [x] Create test fixtures for different pieces
+        - [x] Set up SVG testing utilities
+      - [x] **2. Test Implementation**
+        - [x] Write tests for piece components
+        - [x] Write tests for piece positioning
+        - [x] Ensure test coverage ≥ 80%
+      - [ ] **3. Code Implementation**
+        - [x] Create SVG components for each piece type
+        - [ ] Implement piece positioning on board
+        - [ ] Add piece color variations
+      - [ ] **4. Verification**
+        - [ ] Run all tests
+        - [ ] Test in different browsers
+        - [ ] Verify accessibility
+      - [ ] **5. Review Preparation**
+        - [ ] Update documentation
+        - [ ] Prepare demo
+        - [ ] Document decisions
+      - [ ] **6. User Review**
+        - [ ] Present changes to user BEFORE committing
+        - [ ] Demonstrate functionality and test coverage
+        - [ ] Address any immediate feedback
+        - [ ] Obtain user approval
+      - [ ] **7. Code Commitment**
+        - [ ] Commit approved changes with conventional commit messages
+        - [ ] Push branch to remote repository
+        - [ ] Request formal review if needed
+      - [ ] **8. Integration**
+        - [ ] Merge branch to main
+        - [ ] Delete feature branch
+        - [ ] Verify successful deployment/integration
+      
+      #### Technical Notes
+      Using SVG for pieces enables better scaling and customization.
+      Implemented a factory pattern for creating pieces based on type.
+      
+      ### Task 3: Implement Basic Interaction
+      **Status:** Not Started
+      **Branch:** Not Created
+      **Progress:** 0%
+      **Last Updated:** N/A
+      
+      #### Implementation Approach
+      Implement click and drag interactions for chess pieces using React event handlers.
+      Add highlighting for selected squares and possible moves.
+      Use Redux for managing game state and piece movement.
+      
+      #### Implementation Steps
+      - [ ] **1. Test Planning**
+        - [ ] Define test scenarios for user interactions
+        - [ ] Create test fixtures for game state
+        - [ ] Set up testing for drag events
+      - [ ] **2. Test Implementation**
+        - [ ] Write tests for square selection
+        - [ ] Write tests for piece movement
+        - [ ] Ensure test coverage ≥ 80%
+      - [ ] **3. Code Implementation**
+        - [ ] Add click handlers for squares
+        - [ ] Implement piece movement logic
+        - [ ] Add visual feedback for selection
+      - [ ] **4. Verification**
+        - [ ] Run all tests
+        - [ ] Test interactions manually
+        - [ ] Verify accessibility
+      - [ ] **5. Review Preparation**
+        - [ ] Update documentation
+        - [ ] Prepare interaction demo
+        - [ ] Document implementation decisions
+      - [ ] **6. User Review**
+        - [ ] Present changes to user BEFORE committing
+        - [ ] Demonstrate functionality and test coverage
+        - [ ] Address any immediate feedback
+        - [ ] Obtain user approval
+      - [ ] **7. Code Commitment**
+        - [ ] Commit approved changes with conventional commit messages
+        - [ ] Push branch to remote repository
+        - [ ] Request formal review if needed
+      - [ ] **8. Integration**
+        - [ ] Merge branch to main
+        - [ ] Delete feature branch
+        - [ ] Verify successful deployment/integration
+      
+      ## Constraints
+      
+      - Must work on both desktop and mobile devices
+      - Board must be accessible with keyboard navigation
+      - Must follow the design system's color palette
+      
+      ## Data Models / Schema
+      
+      ```typescript
+      interface ChessSquare {
+        position: string; // e.g., "a1", "e4"
+        color: "light" | "dark";
+        piece?: ChessPiece;
+      }
+      
+      interface ChessPiece {
+        type: "pawn" | "knight" | "bishop" | "rook" | "queen" | "king";
+        color: "white" | "black";
+      }
+      ```
+      
+      ## Implementation Notes
+      
+      Using React for UI components with styled-components for styling. Chess piece SVGs from the open-source library. The board will be responsive with square sizing calculated based on viewport dimensions.
+      
+      ## Testing Approach
+      
+      Unit tests for individual components using Jest and React Testing Library. E2E tests for user interactions using Cypress. Test coverage goal is 85% for this story.
+    output: |
+      This is a valid story following all the required sections and formatting with detailed task tracking.
+    explanation: This example provides a complete story with all required sections properly filled out. It includes detailed task structure with implementation approach, steps, technical notes, and review history.
+  
+  - type: invalid
+    input: |
+      Chess UI Story
+      
+      To do:
+      - Make board
+      - Add pieces
+      - Make it work
+      
+      Will start tomorrow.
+    output: |
+      This story is missing required sections and proper formatting. It should include:
+      
+      - A proper title with story identifier (S{m}-story-name)
+      - Epic reference
+      - User story format (As a, I want, so that)
+      - Status tracking
+      - Context section
+      - Detailed tasks with:
+        - Implementation approach
+        - Implementation steps following TDD
+        - Technical notes
+        - Review history
+      - Progress tracking for each task
+      - Task status information
+      - Branch tracking
+    explanation: This example is missing most of the required sections and does not follow the standardized format for implementation stories with task-level tracking.
+
+related_rules:
+  - [804-workflow-feature-planning.mdc](mdc:.cursor/rules/804-workflow-feature-planning.mdc)
+  - [901-prd-template.mdc](mdc:.cursor/rules/901-prd-template.mdc)
+  - [801-workflow-feature-implementation.mdc](mdc:.cursor/rules/801-workflow-feature-implementation.mdc)
+</rule>

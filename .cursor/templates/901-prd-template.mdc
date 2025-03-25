@@ -1,0 +1,216 @@
+---
+description: ALWAYS use when creating a new PRD or modifying an existing one to ensure consistent structure and completeness
+globs: feature_documentation/**/prd.md
+---
+
+<rule>
+version: 1.1.0
+priority: high
+
+context:
+  - When creating a new Product Requirements Document (PRD)
+  - When updating an existing PRD
+  - When planning feature requirements
+  - When documenting product specifications
+
+filters:
+  - type: path
+    pattern: "feature_documentation/.*/prd\\.md$"
+  - type: content
+    pattern: "Product Requirements Document|PRD"
+  - type: event
+    pattern: "prd_creation_requested"
+
+actions:
+  - type: analyze
+    message: |
+      This rule enforces a standardized PRD format with all required sections to ensure complete and consistent documentation:
+      
+      1. Document header and status tracking
+      2. Feature overview and business context
+      3. Clear goals and measurable outcomes
+      4. Detailed requirements and user stories
+      5. Epic structure and story organization
+      6. Technical specifications and future plans
+      
+      All PRDs should be placed in the feature's directory under feature_documentation.
+  
+  - type: generate
+    message: |
+      # Product Requirements Document (PRD): [Feature Name]
+      
+      ## Status: [Draft|In Review|Approved]
+      
+      ## Introduction
+      [Clear description of the feature and its purpose]
+      [Overview of the feature scope]
+      [Business context and drivers]
+      [Target users/stakeholders]
+      
+      ## Goals
+      [Clear feature objectives]
+      [Measurable outcomes]
+      [Success criteria]
+      [Key performance indicators (KPIs)]
+      
+      ## Features and Requirements
+      
+      ### Functional Requirements
+      - Requirement 1: [Description]
+      - Requirement 2: [Description]
+      
+      ### Non-functional Requirements
+      - Performance: [Criteria]
+      - Security: [Criteria]
+      - Usability: [Criteria]
+      
+      ### User Stories
+      - As a [user type], I want to [action] so that [benefit]
+      - As a [user type], I want to [action] so that [benefit]
+      
+      ## Epic Structure
+      Epic-1: [Title] ([Status])
+      Epic-2: [Title] ([Status])
+      
+      ## Story List
+      
+      ### Epic-1: [Title]
+      - Story-1: [Description]
+      - Story-2: [Description]
+      
+      ## Tech Stack
+      [Languages]
+      [Frameworks]
+      [Dependencies]
+      
+      ## Acceptance Criteria
+      - [ ] Criteria 1: [Description]
+      - [ ] Criteria 2: [Description]
+      
+      ## Out of Scope
+      [Document what is explicitly not included in this feature]
+      
+      ## Future Enhancements
+      [Potential future iterations]
+      [Ideas for expansion]
+      
+      ## Unknowns and Risks
+      [Technical uncertainties]
+      [Business risks]
+      [Potential blockers]
+
+requirements:
+  - PRD must include a clear status indicator (Draft, In Review, Approved)
+  - Introduction must explain the feature purpose and business context
+  - Goals section must include measurable outcomes
+  - Requirements must be categorized (functional, non-functional)
+  - User stories must follow the "As a, I want, so that" format
+  - At least one Epic must be defined
+  - Epic status must be specified (Current, Future, Complete)
+  - Stories must be organized under their respective Epics
+  - Tech stack section must include all required technologies
+  - All PRDs must be placed in the feature documentation directory structure
+
+examples:
+  - type: valid
+    input: |
+      # Product Requirements Document (PRD): User Profile System
+      
+      ## Status: Draft
+      
+      ## Introduction
+      The User Profile System will provide a comprehensive profile management solution for our application. Users will be able to create, view, edit, and manage their personal information, preferences, and account settings. This feature directly supports our business goal of increasing user engagement and personalization.
+      
+      ## Goals
+      - Increase user data completeness by 40%
+      - Reduce account management support tickets by 25%
+      - Improve personalization capabilities across the platform
+      - Enable regulatory compliance with data privacy requirements
+      
+      ## Features and Requirements
+      
+      ### Functional Requirements
+      - User profile creation with required and optional fields
+      - Profile editing and information management
+      - Privacy controls for information sharing
+      - Profile picture upload and management
+      
+      ### Non-functional Requirements
+      - Performance: Profile data loading under 200ms
+      - Security: Encryption of sensitive user information
+      - Accessibility: WCAG 2.1 AA compliance
+      
+      ### User Stories
+      - As a new user, I want to create a profile so that I can personalize my experience
+      - As a returning user, I want to edit my information so that it remains accurate
+      - As a privacy-conscious user, I want to control what information is visible so that I can protect my privacy
+      
+      ## Epic Structure
+      Epic-1: Profile Management Core (Current)
+      Epic-2: Advanced Profile Features (Future)
+      
+      ## Story List
+      
+      ### Epic-1: Profile Management Core
+      - Story-1: Implement basic profile creation
+      - Story-2: Add profile editing functionality
+      - Story-3: Create privacy controls
+      
+      ## Tech Stack
+      - Frontend: React with TypeScript
+      - Backend: Node.js with Express
+      - Database: PostgreSQL for structured data, S3 for profile images
+      
+      ## Acceptance Criteria
+      - [ ] Users can create profiles with all required fields
+      - [ ] Users can edit all profile information
+      - [ ] Privacy controls function as expected
+      - [ ] Performance metrics meet requirements
+      
+      ## Out of Scope
+      - Social network integration
+      - Third-party authentication
+      - Advanced analytics dashboard
+      
+      ## Future Enhancements
+      - Profile verification badges
+      - Custom theme preferences
+      - Activity history on profile
+      
+      ## Unknowns and Risks
+      - Regulatory requirements may change for different regions
+      - Performance impact of profile image storage and retrieval
+      - Migration of existing user data to new profile system
+    output: |
+      This is a valid PRD following all the required sections and formatting.
+    explanation: This example provides a complete PRD with all required sections properly filled out for a User Profile System feature.
+  
+  - type: invalid
+    input: |
+      User Profile Feature
+      
+      Let's add user profiles to the app with these features:
+      - Name and photo
+      - Contact info
+      - Preferences
+      
+      Will add later:
+      - Social media integration
+    output: |
+      This PRD is missing required sections and proper formatting. It should include:
+      
+      - A proper title with "Product Requirements Document (PRD)"
+      - Status indicator
+      - Introduction with business context
+      - Goals with measurable outcomes
+      - Properly categorized requirements
+      - Epic structure and story organization
+      - Tech stack details
+      - Acceptance criteria
+    explanation: This example is missing most of the required sections and does not follow the standardized format.
+
+related_rules:
+  - [804-workflow-feature-planning.mdc](mdc:.cursor/rules/804-workflow-feature-planning.mdc)
+  - [903-story-template.mdc](mdc:.cursor/rules/903-story-template.mdc)
+  - [801-workflow-feature-implementation.mdc](mdc:.cursor/rules/801-workflow-feature-implementation.mdc)
+</rule>

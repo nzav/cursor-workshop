@@ -1,0 +1,248 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+version: 1.4.0
+priority: high
+
+context:
+  - When planning new features
+  - When designing feature implementation
+  - When scoping feature requirements
+  - When creating structured documentation for features
+
+filters:
+  - type: content
+    pattern: "plan.*feature|design.*feature|scope.*feature|implement.*feature"
+  - type: event
+    pattern: "workflow_planning_start"
+  - type: path
+    pattern: "feature_documentation/.*"
+
+actions:
+  - type: analyze
+    message: |
+      This workflow guides the feature planning process through a structured approach with organized documentation:
+      
+      1. Requirements Gathering → PRD (Product Requirements Document)
+      2. Technical Assessment → Technical RFC
+      3. Task Breakdown → Stories
+      4. Implementation Planning → Test Plans
+      
+      All documentation is organized in the feature_documentation directory with a consistent structure.
+  
+  - type: generate
+    message: |
+      # Feature Planning Workflow
+      
+      ## Documentation Structure
+      
+      All feature documentation should be organized in a structured directory:
+      
+      ```
+      feature_documentation/
+      ├── F{n}-feature-name/
+      │   ├── prd.md                 # Product Requirements Document
+      │   ├── technical-rfc.md       # Technical RFC with architecture decisions
+      │   ├── stories/               # Implementation stories
+      │   │   ├── S{m}-story-1.story.md
+      │   │   └── S{m+1}-story-2.story.md
+      │   └── test-plan.md           # Testing strategy
+      ```
+      
+      ## Documentation Workflow
+      
+      ### 1. Create Product Requirements Document (PRD)
+      - Document feature requirements
+      - Create user stories
+      - Define acceptance criteria
+      - Identify business goals
+      - Status: Draft → In Review → Approved
+      - **Always follow [901-prd-template.mdc](mdc:.cursor/rules/901-prd-template.mdc) for PRD creation**
+      
+      ### 2. Create Technical RFC
+      - Evaluate technical feasibility
+      - Document architecture decisions
+      - Propose implementation approach
+      - Create domain model design
+      - Status: Draft → In Review → Approved
+      - **Always follow [902-technical-rfc-template.mdc](mdc:.cursor/rules/902-technical-rfc-template.mdc) for Technical RFC creation**
+      
+      ### 3. Create Implementation Stories
+      - Break down into implementable tasks
+      - Identify dependencies
+      - Estimate effort required
+      - Define test cases
+      - Status: Draft → In Progress → Complete
+      - **Always follow [903-story-template.mdc](mdc:.cursor/rules/903-story-template.mdc) for story creation**
+      
+      ### 4. Create Test Plan
+      - Define testing strategy
+      - Document test cases
+      - Define success criteria
+      - Status: Draft → In Progress → Complete
+      
+      ## Document Templates
+      
+      ### PRD Template
+      Follow the standardized PRD template as defined in [901-prd-template.mdc](mdc:.cursor/rules/901-prd-template.mdc), which includes:
+      
+      - Header and status tracking
+      - Introduction and context
+      - Goals and measurable outcomes
+      - Features and requirements
+      - Epic structure and organization
+      - Story list categorization
+      - Tech stack specifications
+      - Future enhancements planning
+      
+      ### Technical RFC Template
+      Follow the standardized Technical RFC template as defined in [902-technical-rfc-template.mdc](mdc:.cursor/rules/902-technical-rfc-template.mdc), which includes:
+      
+      - Overview of technical implementation
+      - Architecture and design decisions
+      - Domain model with Mermaid diagrams
+      - System design and component interactions
+      - Technical constraints and considerations
+      - Alternative approaches with evaluation
+      - Implementation plan with phasing
+      
+      ### Story Template
+      Follow the standardized story template as defined in [903-story-template.mdc](mdc:.cursor/rules/903-story-template.mdc), which includes:
+      
+      - Header with Epic and Story identification
+      - User story format (As a, I want, So that)
+      - Status tracking
+      - Context documentation
+      - Estimation in story points
+      - Task breakdown with hierarchical structure
+      - Additional sections for constraints, data models, and implementation notes
+      
+      ### Test Plan Template
+      
+      ```markdown
+      # Test Plan: [Feature Name]
+      
+      ## Status: [Draft|In Progress|Complete]
+      
+      ## Testing Strategy
+      [Overview of testing approach]
+      
+      ## Unit Tests
+      [Unit test cases]
+      
+      ## Integration Tests
+      [Integration test cases]
+      
+      ## End-to-End Tests
+      [End-to-end test cases]
+      
+      ## Test Data Requirements
+      [Description of test data needed]
+      
+      ## Success Criteria
+      [Criteria for considering testing complete]
+      ```
+
+requirements:
+  - All feature planning must begin with creating a PRD in the feature_documentation directory
+  - PRD must be approved before creating a Technical RFC
+  - Technical RFC must be approved before breaking down into stories
+  - Stories must follow TDD principles with test cases defined
+  - All documents must track their status (Draft, In Review/Progress, Approved/Complete)
+  - Documentation must be organized in the feature_documentation directory with proper structure
+  - Each feature should have its own subdirectory with standardized documentation
+  - PRDs must adhere to the template in 901-prd-template.mdc
+  - Technical RFCs must adhere to the template in 902-technical-rfc-template.mdc
+  - Stories must follow the template in 903-story-template.mdc
+  - Do NOT create README.md files for feature documentation directories
+  - Features must be numbered with a format of F{n}-{feature-name} where {n} is a sequential number
+  - Stories must be numbered with a format of S{m}-{story-name}.story.md where {m} is a sequential number
+  - Cross-link features and stories in documentation for traceability (reference feature numbers in stories and story numbers in feature documentation)
+
+examples:
+  - type: valid
+    input: |
+      "I need to plan a new user profile feature for our application"
+    output: |
+      I'll help you plan the user profile feature following our structured documentation workflow.
+      
+      Let's start by creating the directory structure and the PRD:
+      
+      ```
+      feature_documentation/
+      └── F1-user-profile/
+          └── prd.md
+      ```
+      
+      For the PRD, we'll follow the standardized template from 901-prd-template.mdc, which includes:
+      
+      1. Header and status (Draft initially)
+      2. Introduction with feature overview
+      3. Goals and measurable objectives
+      4. Feature requirements (functional and non-functional)
+      5. Epic structure with appropriate organization
+      6. Initial story list with numbered references (S1, S2, etc.)
+      7. Tech stack considerations
+      8. Future enhancement possibilities
+      
+      Once the PRD is drafted and approved, we'll create a Technical RFC following the 902-technical-rfc-template.mdc to document the architecture and implementation approach.
+      
+      Would you like me to start drafting the PRD for the user profile feature?
+    explanation: Properly initiates the feature planning workflow with structured documentation approach and references the standard PRD template, now with numbered feature and story references
+
+  - type: valid
+    input: |
+      "We need to finalize the user profile feature plan before implementation"
+    output: |
+      Let's review the current state of the user profile feature documentation and ensure everything is ready for implementation.
+      
+      First, let's check the status of the required documents:
+      
+      1. Is the PRD (feature_documentation/F1-user-profile/prd.md) marked as Approved?
+      2. Is the Technical RFC (feature_documentation/F1-user-profile/technical-rfc.md) marked as Approved?
+      3. Do we have stories created in feature_documentation/F1-user-profile/stories/ following the story template with proper numbering (S1, S2, etc.)?
+      4. Is there a test plan in feature_documentation/F1-user-profile/test-plan.md?
+      
+      If any of these are missing or not approved, we should address that first. For example, if the PRD is still in Draft status, we need to finalize and get approval before proceeding.
+      
+      Would you like me to review the existing documentation or help create any missing documents?
+    explanation: Properly checks the documentation readiness following the workflow and references the appropriate templates with numbered feature and story references
+
+  - type: invalid
+    input: |
+      "Let's create a README.md for our feature documentation"
+    output: |
+      According to our feature documentation workflow, we don't create README.md files for feature documentation directories. Instead, we focus on creating the following standardized documents:
+      
+      1. PRD (prd.md) - Product Requirements Document
+      2. Technical RFC (technical-rfc.md) - Technical implementation details
+      3. Stories (in the stories/ directory) - Implementation tasks with numbered format (S{m}-{story-name}.story.md)
+      4. Test Plan (test-plan.md) - Testing strategy
+      
+      These documents provide all the necessary information for the feature implementation. Would you like me to help with any of these documents instead?
+    explanation: Correctly identifies that README.md files should not be created for feature documentation and suggests the proper documentation approach with numbered story format
+
+  - type: valid
+    input: |
+      "I need to create a story for the user profile feature"
+    output: |
+      I'll help you create a story for the F1-user-profile feature following our structured documentation approach.
+      
+      Let's determine the next story number by checking the existing stories in the feature_documentation/F1-user-profile/stories/ directory. If this is the first story, we'll use S1.
+      
+      We'll create a file named S1-user-authentication.story.md (or the appropriate number and name) following the 903-story-template.mdc format.
+      
+      The story will include:
+      
+      1. Header with feature reference (F1-user-profile)
+      2. Story number and name (S1-user-authentication)
+      3. User story format
+      4. Status tracking
+      5. Context with reference to the parent feature
+      6. Task breakdown
+      7. Acceptance criteria
+      
+      Would you like me to draft this story now?
+    explanation: Properly demonstrates creating a numbered story with cross-reference to the parent feature

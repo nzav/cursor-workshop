@@ -1,0 +1,293 @@
+---
+description: ALWAYS use when creating or updating technical RFC documents to ensure architectural clarity and consistency
+globs: feature_documentation/**/technical-rfc.md
+---
+
+<rule>
+version: 1.0.0
+priority: high
+
+context:
+  - When creating a new Technical RFC for a feature
+  - When updating an existing Technical RFC
+  - When documenting architectural decisions
+  - When planning technical implementation
+
+filters:
+  - type: path
+    pattern: "feature_documentation/.*/technical-rfc\\.md$"
+  - type: content
+    pattern: "Technical RFC|Architecture|Implementation"
+  - type: event
+    pattern: "rfc_creation_requested"
+
+actions:
+  - type: analyze
+    message: |
+      This rule enforces a standardized Technical RFC format that ensures architectural decisions and technical approaches are clearly documented:
+      
+      1. Overview of technical implementation
+      2. Architecture and design decisions
+      3. Domain model and system interactions
+      4. Technical constraints and considerations
+      5. Alternative approaches evaluated
+      6. Implementation strategy
+      
+      Technical RFCs should be created after PRD approval and before breaking down into implementation stories.
+  
+  - type: generate
+    message: |
+      # Technical RFC: [Feature Name]
+      
+      ## Status: [Draft|In Review|Approved]
+      
+      ## Overview
+      [Brief description of the technical implementation approach]
+      [Summary of the key technical decisions]
+      [Connection to business requirements from the PRD]
+      
+      ## Architecture
+      [Description of the architectural approach]
+      [Components and their responsibilities]
+      [Data flow diagrams]
+      
+      ### Domain Model
+      
+      ```mermaid
+      classDiagram
+        class Entity1 {
+          +attribute1: type
+          +attribute2: type
+          +operation()
+        }
+        class Entity2 {
+          +attribute1: type
+          +operation()
+        }
+        Entity1 --> Entity2: relationship
+      ```
+      
+      [Domain entity descriptions]
+      [Entity relationships]
+      
+      ### System Design
+      
+      ```mermaid
+      flowchart TD
+        A[Component A] --> B[Component B]
+        B --> C[Component C]
+        B --> D[Component D]
+      ```
+      
+      [Component interaction descriptions]
+      [API design]
+      [Data flow explanations]
+      
+      ## Technical Constraints
+      [Technical limitations and constraints]
+      [Performance requirements]
+      [Scalability considerations]
+      [Security requirements]
+      
+      ## Alternatives Considered
+      [Alternative 1: Description and evaluation]
+      [Alternative 2: Description and evaluation]
+      [Justification for chosen approach]
+      
+      ## Implementation Plan
+      [High-level implementation approach]
+      [Phasing strategy]
+      [Dependency management]
+      [Rollout considerations]
+      
+      ## Technical Risks
+      [Risk 1: Description and mitigation]
+      [Risk 2: Description and mitigation]
+      
+      ## Testing Strategy
+      [Technical testing approach]
+      [Unit, integration, and system testing considerations]
+      [Performance testing approach]
+
+requirements:
+  - Technical RFC must include a clear status indicator (Draft, In Review, Approved)
+  - Overview must connect technical approach to business requirements in the PRD
+  - Architecture section must include domain model and system design
+  - Domain model should use Mermaid diagrams for clarity
+  - System design should include component interactions and data flow
+  - Technical constraints must be clearly documented
+  - Alternative approaches must be documented with evaluation criteria
+  - Implementation plan must outline phasing and dependencies
+  - Technical RFCs must be placed in the feature documentation directory structure
+
+examples:
+  - type: valid
+    input: |
+      # Technical RFC: User Profile System
+      
+      ## Status: In Review
+      
+      ## Overview
+      This technical RFC outlines the implementation approach for the User Profile System. We will implement a microservice-based solution to manage user profile data, with a focus on scalability and data privacy. This approach supports the business requirements of increased user engagement and personalization while enabling compliance with data privacy regulations.
+      
+      ## Architecture
+      The User Profile System will follow a layered architecture with a dedicated microservice for profile management. It will include an API layer, service layer, and data persistence layer.
+      
+      ### Domain Model
+      
+      ```mermaid
+      classDiagram
+        class UserProfile {
+          +id: UUID
+          +displayName: String
+          +email: String
+          +preferences: Map<String, Object>
+          +createdAt: DateTime
+          +updatedAt: DateTime
+          +updateProfile()
+          +updatePreferences()
+        }
+        class PrivacySettings {
+          +id: UUID
+          +profileId: UUID
+          +visibility: VisibilityLevel
+          +publicFields: String[]
+          +updateVisibility()
+        }
+        class ProfileImage {
+          +id: UUID
+          +profileId: UUID
+          +url: String
+          +uploadDate: DateTime
+          +upload()
+          +delete()
+        }
+        UserProfile "1" --> "1" PrivacySettings: has
+        UserProfile "1" --> "0..1" ProfileImage: has
+      ```
+      
+      The domain model consists of three primary entities:
+      - UserProfile: Core user information and preferences
+      - PrivacySettings: Controls what profile information is visible
+      - ProfileImage: Handles profile picture storage and retrieval
+      
+      ### System Design
+      
+      ```mermaid
+      flowchart TD
+        A[Web/Mobile Client] --> B[API Gateway]
+        B --> C[Profile Service]
+        C --> D[Profile Database]
+        C --> E[Image Storage Service]
+        C --> F[Notification Service]
+        C --> G[Analytics Service]
+      ```
+      
+      The Profile Service will expose RESTful APIs for profile management, with the following endpoints:
+      - GET /profiles/{id}: Retrieve a profile
+      - PUT /profiles/{id}: Update a profile
+      - POST /profiles/{id}/image: Upload a profile image
+      - PUT /profiles/{id}/privacy: Update privacy settings
+      
+      ## Technical Constraints
+      - Profile data loading must complete in under 200ms
+      - User data must be encrypted at rest
+      - System must handle up to 10,000 concurrent profile requests
+      - Must comply with GDPR and CCPA requirements
+      - API must be versioned to support backward compatibility
+      
+      ## Alternatives Considered
+      
+      ### Alternative 1: Monolithic Approach
+      Integrating profile management directly into the main application.
+      
+      Pros:
+      - Simpler initial implementation
+      - No network overhead between services
+      
+      Cons:
+      - Reduced scalability
+      - Tighter coupling with other systems
+      - More difficult to maintain data boundaries
+      
+      ### Alternative 2: Third-party Profile Management
+      Using an external service like Auth0 or Firebase for profile management.
+      
+      Pros:
+      - Faster time to market
+      - Managed security and compliance
+      
+      Cons:
+      - Less customization flexibility
+      - Vendor lock-in
+      - Higher operational costs long-term
+      
+      We chose the microservice approach for its scalability, clear boundaries, and flexibility to adapt to future requirements while maintaining performance.
+      
+      ## Implementation Plan
+      
+      1. Phase 1: Core Profile Management
+         - Implement basic CRUD operations for profiles
+         - Set up database schema and migrations
+         - Create RESTful API endpoints
+      
+      2. Phase 2: Privacy Controls
+         - Implement privacy settings model
+         - Add field-level visibility controls
+         - Update API to respect privacy settings
+      
+      3. Phase 3: Profile Image Management
+         - Set up cloud storage integration
+         - Add image upload/retrieve functionality
+         - Implement image resizing and optimization
+      
+      ## Technical Risks
+      
+      - Risk 1: Database performance under high load
+        Mitigation: Implement caching layer and database sharding strategy
+      
+      - Risk 2: Image storage costs may scale unexpectedly
+        Mitigation: Implement size limits and compression, monitor usage closely
+      
+      - Risk 3: Compliance requirements may change
+        Mitigation: Design with data portability and flexible consent management
+      
+      ## Testing Strategy
+      
+      - Unit tests for each service method with 90% coverage target
+      - Integration tests for API endpoints with focus on data validation
+      - Performance tests to ensure latency requirements are met
+      - Security tests including penetration testing and data encryption verification
+    output: |
+      This is a valid Technical RFC following all the required sections and formatting.
+    explanation: This example provides a complete Technical RFC with all required sections properly filled out for a User Profile System feature, including architecture diagrams, domain models, and implementation planning.
+  
+  - type: invalid
+    input: |
+      User Profile Technical Design
+      
+      We'll use a database to store profiles and add an API to access them. Will need to figure out the schema later.
+      
+      Architecture:
+      - Database
+      - API
+      - Frontend
+    output: |
+      This Technical RFC is missing required sections and proper formatting. It should include:
+      
+      - A proper title with "Technical RFC"
+      - Status indicator
+      - Detailed overview connecting to PRD requirements
+      - Architecture with domain model and system design diagrams
+      - Technical constraints and considerations
+      - Alternatives considered with evaluation
+      - Implementation plan with phasing
+      - Technical risks and mitigations
+    explanation: This example is missing most of the required sections and does not provide sufficient technical detail for implementation.
+
+related_rules:
+  - [804-workflow-feature-planning.mdc](mdc:.cursor/rules/804-workflow-feature-planning.mdc)
+  - [901-prd-template.mdc](mdc:.cursor/rules/901-prd-template.mdc)
+  - [903-story-template.mdc](mdc:.cursor/rules/903-story-template.mdc)
+  - [801-workflow-feature-implementation.mdc](mdc:.cursor/rules/801-workflow-feature-implementation.mdc)
+</rule> 
