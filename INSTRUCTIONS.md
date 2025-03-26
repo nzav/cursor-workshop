@@ -158,19 +158,24 @@ This workshop will guide you through using Cursor, an AI-powered code editor, to
 
 3. **Exploring Rule Activation:** Discuss how the `description` and `globs` parameters in the rule files control when a rule is considered and potentially applied by Cursor's AI.
 
-## Section 4: Integrating with Next.js Ecosystem using MCP (Model Context Protocol) (20 minutes)
+## Section 4: Enhancing Next.js Development with Qdrant-powered RAG using MCP (20 minutes)
 
-1. **Brainstorming MCP Use Cases for Next.js:**
-   - Discuss how MCP could enable deeper integrations for Next.js development:
-     - **Integration with Storybook:** An MCP server could provide information about available components in your Storybook setup, allowing Cursor to suggest and use them correctly.
-     - **Backend API Schema Awareness:** If you have an OpenAPI or GraphQL schema for your backend API, an MCP server could provide this context to Cursor, enabling more accurate code completion and type checking when fetching data.
-     - **Deployment Tooling Integration:** An MCP server could allow Cursor to trigger deployments or check the status of your Next.js application on platforms like Vercel or Netlify.
-2. **Exploring Potential MCP Integrations (Conceptual):**
-   - Explain that creating MCP servers involves defining tools (functions) that Cursor can call. These tools can interact with external systems or data sources.
-   - For example, a "Get Available Components" tool in a Storybook MCP server might fetch a list of component names and their props.
-   - Mention that MCP servers can be written in any language and communicate with Cursor via standard input/output or HTTP. ([Model Context Protocol - Cursor](https://docs.cursor.com/context/model-context-protocol))
-3. **Configuration (Recap):**
-   - Remind participants that MCP servers are configured in Cursor's settings under the "Features" > "MCP" section. They can add new MCP servers by providing a name and either a command to run a local server or the URL of a remote server.
+1. **Introducing Retrieval-Augmented Generation (RAG) for Next.js:**
+   - Explain how RAG can enhance development by providing context-aware assistance based on your codebase and documentation.
+   - Discuss the benefits of using Qdrant as a vector database for storing and retrieving relevant code snippets and documentation.
+   - Reference the integration between Cursor and Qdrant through the Smithery MCP server: [@smithery.ai/server/mcp-server-qdrant](https://smithery.ai/server/mcp-server-qdrant).
+
+2. **Setting Up the Qdrant MCP Server:**
+   - Rename the `.cursor/__mcp.json` file to `mcp.json` for the Cursor to pick it up.
+   - Go to Settings > Features > MCP. Check that the `mcp-server-qdrant` server is enabled.
+   - Explain how to initialize your vector database with your Next.js project's documentation and code.
+   - Inspired by [Qdrant webinar on VIBE coding with RAG](https://qdrant.tech/blog/webinar-vibe-coding-rag/).
+
+3. **Practical Applications for Next.js Development:**
+   - **Component Consistency:** Demonstrate how to use RAG to ensure new components follow existing patterns in your codebase.
+   - **API Development:** Show how RAG can help with consistent API route implementation by retrieving similar endpoints.
+   - **Documentation Integration:** Explain how to include your team's documentation in the vector database to provide contextual help.
+   - **Testing Patterns:** Demonstrate how RAG can suggest testing approaches based on similar components.
 
 ## Section 5: Q&A and Wrap-up (10 minutes)
 

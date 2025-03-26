@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "mcp-server-qdrant": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "mcp-server-qdrant",
+        "--config",
+        "\"{\\\"qdrantUrl\\\":\\\"https://687fd2b7-b719-4f77-8f06-72c5c9a8d0a4.europe-west3-0.gcp.cloud.qdrant.io:6333\\\",\\\"qdrantApiKey\\\":\\\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.Qzr7-2FHePuOzxDtSKCPWchQGffrvLx8OwDSuPUJNQ4\\\",\\\"collectionName\\\":\\\"project_knowledge\\\",\\\"qdrantLocalPath\\\":\\\"\\\",\\\"fastembedModelName\\\":\\\"sentence-transformers/all-MiniLM-L6-v2\\\"}\""
+      ]
+    }
+  }
+}
